@@ -1,11 +1,13 @@
 package service
 
 import (
+	"bytes"
 	"context"
+	"encoding/json"
 	"fmt"
 	"github.com/email-verification/mailer"
 	"github.com/golang-jwt/jwt/v5"
-	"log"
+	"net/http"
 	"time"
 )
 
@@ -62,27 +64,26 @@ func (s *emailVerificationService) ConfirmEmail(ctx context.Context, tokenString
 }
 
 func (s *emailVerificationService) notifyOtherService(ctx context.Context, email string) error {
-	//body, _ := json.Marshal(map[string]interface{}{
-	//	"email":   email,
-	//	"correct": true,
-	//})
-	//
-	//req, err := http.NewRequestWithContext(ctx, http.MethodPost, s.notifyURL, bytes.NewBuffer(body))
-	//if err != nil {
-	//	return err
-	//}
-	//req.Header.Set("Content-Type", "application/json")
-	//
-	//resp, err := http.DefaultClient.Do(req)
-	//if err != nil {
-	//	return err
-	//}
-	//defer resp.Body.Close()
-	//
-	//if resp.StatusCode != http.StatusOK {
-	//	return fmt.Errorf("service response%d", resp.StatusCode)
-	//}
-	log.Printf("notifyOtherService: email=%s, correct=true\n", email)
+	body, _ := json.Marshal(map[string]interface{}{
+		"email":   email,
+		"correct": true,
+	})
+
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, s.notifyURL, bytes.NewBuffer(body))
+	if err != nil {
+		return err
+	}
+	req.Header.Set("Content-Type", "application/json")
+
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return fmt.Errorf("service response%d", resp.StatusCode)
+	}
 
 	return nil
 }
