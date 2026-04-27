@@ -9,6 +9,7 @@ import (
 
 type EmailVerificationHandler interface {
 	VerifyEmail(emailVerificationService service.EmailVerificationService) error
+	ConfirmEmail(g *gin.Context)
 }
 
 type emailVerificationHandler struct {
@@ -32,4 +33,15 @@ func (h *emailVerificationHandler) VerifyEmail(g *gin.Context) {
 	}
 
 	g.JSON(http.StatusOK, "correct")
+}
+
+func (h *emailVerificationHandler) ConfirmEmail(g *gin.Context) {
+	token := g.Query("token")
+
+	if err := h.emailVerificationService.ConfirmEmail(g.Request.Context(), token); err != nil {
+		g.JSON(http.StatusBadRequest, &models.EmailVerificationError{Code: 400, Message: err.Error()})
+		return
+	}
+
+	g.JSON(http.StatusOK, gin.H{"message": "Email подтверждён"})
 }
