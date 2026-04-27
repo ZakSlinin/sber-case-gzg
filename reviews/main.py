@@ -16,9 +16,8 @@ DB_NAME = os.environ.get("DB_NAME")
 
 app = FastAPI()  
 
-#app.add_middleware(DBSessionMiddleware, db_url=f"postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}")
+app.add_middleware(DBSessionMiddleware, db_url=f"postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}")
 
-app.add_middleware(DBSessionMiddleware, db_url="postgresql://GSHORTI:1@localhost:5432/TEST")
 
 
 @app.post("/api/review/create", response_model=ReviewResponse)
@@ -42,7 +41,7 @@ async def create_review(review: CreateReviewRequest):
 	db.session.add(cr)
 	db.session.commit()
 	async with aiohttp.ClientSession() as session:
-		async with session.post('http://email/api/email-verification/verify', data=json.dumps({"email": review.email})) as response: pass
+		async with session.post('http://email-verification:8080/api/email-verification/verify', data=json.dumps({"email": review.email})) as response: pass
 
 	return {
 		"id": cr.id,
@@ -65,3 +64,9 @@ async def confirm(request: ConfirmRequest):
 	db.session.add(review)
 	db.session.commit()
 	return {"message": "OK"}
+
+@app.get("/api/email-verification/verify")
+async def verify(token: str):
+	async with aiohttp.ClientSession() as session:
+		async with session.get(f"http://email-verification:8080/api/email-verification/verify?{token}") as response:
+			return respons.text
