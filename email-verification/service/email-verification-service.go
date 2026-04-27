@@ -8,12 +8,16 @@ import (
 )
 
 type EmailVerificationService interface {
-	VerifyEmail(ctx context.Context) error
+	VerifyEmail(ctx context.Context, req string) error
 }
 
 type emailVerificationService struct {
 	mailer          mailer.EmailVerificationMailer
 	urlVerification string
+}
+
+func NewEmailVerificationService(mailer mailer.EmailVerificationMailer, urlVerification string) *emailVerificationService {
+	return &emailVerificationService{mailer: mailer, urlVerification: urlVerification}
 }
 
 func (s *emailVerificationService) VerifyEmail(ctx context.Context, email string) error {
