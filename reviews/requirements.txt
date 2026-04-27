@@ -1,0 +1,6 @@
+fastapi[standard]
+fastapi-sqlalchemy
+alembic
+sqlalchemy
+psycopg2-binary
+aiohttp 
