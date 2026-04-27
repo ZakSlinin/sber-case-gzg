@@ -30,6 +30,7 @@ func main() {
 	apiEmailVerification := r.Group("/api/email-verification")
 	{
 		apiEmailVerification.POST("/verify", emailVerificationHandler.VerifyEmail)
+		apiEmailVerification.GET("/verify", emailVerificationHandler.ConfirmEmail)
 	}
 
 	r.Run(":8080")
