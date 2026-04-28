@@ -67,7 +67,7 @@ async def get_reviews():
 	sum_mark = 0
 	reviews = db.session.query(Review).filter(Review.confirmed==True).all()
 	for review in reviews:
-		sum_mark += review["mark"]
+		sum_mark += review.mark
 		count += 1
 	average = sum_mark // count
 	return {
