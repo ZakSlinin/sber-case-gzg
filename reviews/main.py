@@ -2,6 +2,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi_sqlalchemy import DBSessionMiddleware 
 from fastapi_sqlalchemy import db 
 from models import CreateReviewRequest, ReviewResponse, Review, ConfirmResponse, ConfirmRequest
+from fastapi.middleware.cors import CORSMiddleware
 import aiohttp
 from datetime import datetime
 import json
@@ -18,6 +19,14 @@ app = FastAPI()
 
 app.add_middleware(DBSessionMiddleware, db_url=f"postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}")
 
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 @app.post("/api/review/create")
