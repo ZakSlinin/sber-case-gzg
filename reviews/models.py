@@ -37,3 +37,7 @@ class ReviewResponse(BaseModel):
 	mark: int
 	comment: str
 	created_at: datetime
+
+class GetResponse(BaseModel):
+	reviews: list[ReviewResponse]
+	average: int

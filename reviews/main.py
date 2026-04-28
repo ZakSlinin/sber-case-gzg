@@ -1,7 +1,7 @@
 from fastapi import FastAPI, HTTPException
 from fastapi_sqlalchemy import DBSessionMiddleware 
 from fastapi_sqlalchemy import db 
-from models import CreateReviewRequest, ReviewResponse, Review, ConfirmResponse, ConfirmRequest
+from models import CreateReviewRequest, ReviewResponse, Review, ConfirmResponse, ConfirmRequest, GetResponse
 from fastapi.middleware.cors import CORSMiddleware
 import aiohttp
 from datetime import datetime
@@ -29,7 +29,7 @@ app.add_middleware(
 )
 
 
-@app.post("/api/review/create")
+@app.post("/api/review/create", response_model=ReviewResponse)
 async def create_review(review: CreateReviewRequest):
 	if not "@" in review.email:
 		raise HTTPException(status_code=400, detail="Email is invalid")
@@ -63,7 +63,18 @@ async def create_review(review: CreateReviewRequest):
 
 @app.get("/api/review/get", response_model=list[ReviewResponse])
 async def get_reviews():
-	return db.session.query(Review).filter(Review.confirmed==True).all()
+	count = 0
+	sum_mark = 0
+	reviews = db.session.query(Review).filter(Review.confirmed==True).all()
+	for review in reviews:
+		sum_mark += review["mark"]
+		count += 1
+	average = sum_mark // count
+	return {
+		"reviews": reviews,
+		"average": average	
+	}
+	
 
 
 @app.post("/api/review/confirm", response_model=ConfirmResponse)
