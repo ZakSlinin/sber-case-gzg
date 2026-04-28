@@ -69,7 +69,7 @@ async def get_reviews():
 	for review in reviews:
 		sum_mark += review.mark
 		count += 1
-	average = sum_mark // count
+	average = sum_mark / count
 	return {
 		"reviews": reviews,
 		"average": average	
