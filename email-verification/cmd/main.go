@@ -20,10 +20,8 @@ func main() {
 	)
 
 	urlVerification := os.Getenv("URL_VERIFICATION")
-	//urlVerification := "http://localhost:8080/api/email-verification/verify?token="
-
-	emailVerificationService := service.NewEmailVerificationService(smtpMailer, urlVerification)
-	emailVerificationHandler := handler.NewEmailVerificationHandler(emailVerificationService)
+	notifyUrl := os.Getenv("NOTIFY_URL")
+	emailVerificationService := service.NewEmailVerificationService(smtpMailer, urlVerification, notifyUrl)
 
 	r := gin.Default()
 
