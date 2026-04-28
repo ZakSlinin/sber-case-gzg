@@ -22,7 +22,7 @@ func NewEmailVerificationHandler(emailVerificationService service.EmailVerificat
 
 func (h *emailVerificationHandler) VerifyEmail(g *gin.Context) {
 	var req models.EmailVerificationRequest
-	if err := g.ShouldBind(&req); err != nil {
+	if err := g.ShouldBindJSON(&req); err != nil {
 		g.JSON(http.StatusBadRequest, &models.EmailVerificationError{Code: 400, Message: err.Error()})
 		return
 	}

@@ -20,7 +20,7 @@ app.add_middleware(DBSessionMiddleware, db_url=f"postgresql://{DB_USER}:{DB_PASS
 
 
 
-@app.post("/api/review/create", response_model=ReviewResponse)
+@app.post("/api/review/create")
 async def create_review(review: CreateReviewRequest):
 	if not "@" in review.email:
 		raise HTTPException(status_code=400, detail="Email is invalid")
@@ -41,16 +41,16 @@ async def create_review(review: CreateReviewRequest):
 	db.session.add(cr)
 	db.session.commit()
 	async with aiohttp.ClientSession() as session:
-		async with session.post('http://email-verification:8080/api/email-verification/verify', data=json.dumps({"email": review.email})) as response: pass
+		async with session.post('http://email-verification:8080/api/email-verification/verify', data=json.dumps({"email": review.email})) as response: 
 
-	return {
-		"id": cr.id,
-		"username": cr.username,
-		"email": cr.email,
-		"mark": cr.mark,
-		"comment": cr.comment,
-		"created_at": cr.created_at
-		}
+			return {
+				"id": cr.id,
+				"username": cr.username,
+				"email": cr.email,
+				"mark": cr.mark,
+				"comment": cr.comment,
+				"created_at": cr.created_at,
+				}
 
 @app.get("/api/review/get", response_model=list[ReviewResponse])
 async def get_reviews():
@@ -69,4 +69,4 @@ async def confirm(request: ConfirmRequest):
 async def verify(token: str):
 	async with aiohttp.ClientSession() as session:
 		async with session.get(f"http://email-verification:8080/api/email-verification/verify?{token}") as response:
-			return respons.text
+			return response.text
