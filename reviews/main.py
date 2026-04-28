@@ -61,7 +61,7 @@ async def create_review(review: CreateReviewRequest):
 				"created_at": cr.created_at,
 				}
 
-@app.get("/api/review/get", response_model=list[ReviewResponse])
+@app.get("/api/review/get", response_model=GetResponse)
 async def get_reviews():
 	count = 0
 	sum_mark = 0
