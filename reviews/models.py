@@ -40,4 +40,4 @@ class ReviewResponse(BaseModel):
 
 class GetResponse(BaseModel):
 	reviews: list[ReviewResponse]
-	average: int
+	average: float
