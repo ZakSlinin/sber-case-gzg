@@ -68,5 +68,5 @@ async def confirm(request: ConfirmRequest):
 @app.get("/api/email-verification/verify")
 async def verify(token: str):
 	async with aiohttp.ClientSession() as session:
-		async with session.get(f"http://email-verification:8080/api/email-verification/verify?{token}") as response:
+		async with session.get(f"http://email-verification:8080/api/email-verification/verify?token={token}") as response:
 			return await response.json()
