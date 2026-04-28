@@ -19,8 +19,8 @@ func main() {
 		os.Getenv("SMTP_PASS"),
 	)
 
-	//urlVerification := os.Getenv("URL_VERIFICATION")
-	urlVerification := "http://localhost:8080/api/email-verification/verify?token="
+	urlVerification := os.Getenv("URL_VERIFICATION")
+	//urlVerification := "http://localhost:8080/api/email-verification/verify?token="
 
 	emailVerificationService := service.NewEmailVerificationService(smtpMailer, urlVerification)
 	emailVerificationHandler := handler.NewEmailVerificationHandler(emailVerificationService)
