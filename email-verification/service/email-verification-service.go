@@ -22,8 +22,8 @@ type emailVerificationService struct {
 	notifyURL       string
 }
 
-func NewEmailVerificationService(mailer mailer.EmailVerificationMailer, urlVerification string) *emailVerificationService {
-	return &emailVerificationService{mailer: mailer, urlVerification: urlVerification}
+func NewEmailVerificationService(mailer mailer.EmailVerificationMailer, urlVerification string, notifyUrl string) *emailVerificationService {
+	return &emailVerificationService{mailer: mailer, urlVerification: urlVerification, notifyURL: notifyUrl}
 }
 
 func (s *emailVerificationService) VerifyEmail(ctx context.Context, email string) error {
