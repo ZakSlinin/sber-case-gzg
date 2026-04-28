@@ -22,7 +22,6 @@ func main() {
 	urlVerification := os.Getenv("URL_VERIFICATION")
 	notifyUrl := os.Getenv("NOTIFY_URL")
 	emailVerificationService := service.NewEmailVerificationService(smtpMailer, urlVerification, notifyUrl)
-	emailVerificationHandler := handler.NewEmailVerificationHandler(emailVerificationService)
 
 	r := gin.Default()
 
