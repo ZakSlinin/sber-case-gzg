@@ -1,8 +1,5 @@
 # SBER-CASE-GZG 
 
-### Service for calculating how much you spend on a subscription
-#### Environment Configuration
-
 Create your environment file from the example:
 
 ```bash
